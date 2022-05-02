@@ -124,8 +124,8 @@ class LinkedinEasyApply:
             job_results = self.browser.find_element_by_class_name("jobs-search-results")
             self.scroll_slow(job_results)
             self.scroll_slow(job_results, step=300, reverse=True)
-
             job_list = self.browser.find_elements_by_class_name('jobs-search-results__list')[0].find_elements_by_class_name('jobs-search-results__list-item')
+
         except:
             raise Exception("No more jobs on this page")
 
@@ -164,7 +164,10 @@ class LinkedinEasyApply:
             if company.lower() not in [word.lower() for word in self.company_blacklist] and \
                contains_blacklisted_keywords is False and link not in self.seen_jobs:
                 try:
-                    job_el = job_tile.find_element_by_class_name('job-card-list__title')
+                    print("finding job")
+                    job_el= job_tile.find_element(by=By.CLASS_NAME, value='job-card-list__title')
+                    #job_el = job_tile.find_element_by_class_name('job-card-list__title')
+                    print(job_el.text)
                     job_el.click()
 
                     time.sleep(random.uniform(3, 5))
@@ -264,6 +267,13 @@ class LinkedinEasyApply:
             closed_notification = True
         except:
             pass
+        try:
+            self.browser.find_element_by_class_name('artdeco-modal__dismiss').click()
+            closed_notification = True
+            print("skipped the popup successfully")
+        except:
+            pass
+
         time.sleep(random.uniform(3, 5))
 
         if closed_notification is False:
